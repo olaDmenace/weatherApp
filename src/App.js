@@ -51,39 +51,44 @@ function App() {
     fetchWeatherData();
   }, []);
 
-  const fetchData = async (e) => {
-    e.preventDefault();
-    const options = {
-      method: "GET",
-      url: "https://address-from-to-latitude-longitude.p.rapidapi.com/geolocationapi",
-      params: {
-        address: `${address}`,
-      },
-      headers: {
-        "X-RapidAPI-Key": "b94b0e76fcmsh4a2462e9795f720p13b532jsn9e5a1f267e93",
-        "X-RapidAPI-Host": "address-from-to-latitude-longitude.p.rapidapi.com",
-      },
-    };
+  const fetchData = async () => {
+    if (address) {
+      const options = {
+        method: "GET",
+        url: "https://address-from-to-latitude-longitude.p.rapidapi.com/geolocationapi",
+        params: {
+          address: `${address}`,
+        },
+        headers: {
+          "X-RapidAPI-Key":
+            "b94b0e76fcmsh4a2462e9795f720p13b532jsn9e5a1f267e93",
+          "X-RapidAPI-Host":
+            "address-from-to-latitude-longitude.p.rapidapi.com",
+        },
+      };
 
-    try {
-      const response = await axios.request(options);
-      console.log(response.data);
+      try {
+        const response = await axios.request(options);
+        console.log(response.data);
 
-      const longitude = response?.data?.Results[0]?.longitude;
-      const latitude = response?.data?.Results[0]?.latitude;
+        const longitude = response?.data?.Results[0]?.longitude;
+        const latitude = response?.data?.Results[0]?.latitude;
 
-      const weatherResponse = await axios.get(
-        `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=afed90d4031a483fab64c7bac37b1e2a`
-      );
-      console.log(weatherResponse.data);
-      setSuccess("Weather for requested location updated");
-      setResponse(weatherResponse?.data?.data);
-    } catch (error) {
-      if (error.response && error.response.status === 429) {
-        setError("API rate limit exceeded. Please try again later.");
-      } else {
-        setError("Failed to fetch weather data");
+        const weatherResponse = await axios.get(
+          `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=afed90d4031a483fab64c7bac37b1e2a`
+        );
+        console.log(weatherResponse.data);
+        setSuccess("Weather for requested location updated");
+        setResponse(weatherResponse?.data?.data);
+      } catch (error) {
+        if (error.response && error.response.status === 429) {
+          setError("API rate limit exceeded. Please try again later.");
+        } else {
+          setError("Failed to fetch weather data");
+        }
       }
+    } else {
+      alert("Enter an address");
     }
   };
 
@@ -123,26 +128,26 @@ function App() {
         </div>
       </div>
       <div className="px-4 py-10 grid gap-5 md:w-10/12 mx-auto lg:max-w-7xl">
-        <form className="grid gap-5">
-          <label htmlFor="city" className="relative">
-            <input
-              type="text"
-              id="search"
-              name="search"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              placeholder="Enter Address"
-              className="border border-blue-700 bg-transparent placeholder:text-blue-700 rounded-md h-12 w-full px-3 pr-10 ring-0 outline-blue-500 dark:outline-none text-blue-700"
-            />
-            <RiSearchLine className="absolute top-2 right-2 h-8 w-8 p-1 text-blue-800 cursor-pointer" />
-          </label>
-          <button
-            className="bg-blue-700 rounded-md text-white h-12 hover:bg-blue-500 transition ease-in-out duration-500"
-            onClick={() => fetchData()}
-          >
-            Get Forecast
-          </button>
-        </form>
+        {/* <form className="grid gap-5"> */}
+        <label htmlFor="city" className="relative">
+          <input
+            type="text"
+            id="search"
+            name="search"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Enter Address"
+            className="border border-blue-700 bg-transparent placeholder:text-blue-700 rounded-md h-12 w-full px-3 pr-10 ring-0 outline-blue-500 dark:outline-none text-blue-700"
+          />
+          <RiSearchLine className="absolute top-2 right-2 h-8 w-8 p-1 text-blue-800 cursor-pointer" />
+        </label>
+        <button
+          className="bg-blue-700 rounded-md text-white h-12 hover:bg-blue-500 transition ease-in-out duration-500"
+          onClick={() => fetchData()}
+        >
+          Get Forecast
+        </button>
+        {/* </form> */}
         {error && (
           <p className="bg-red-400/30 min-h-10 text-lg px-2 py-3 flex items-center gap-3 content-center text-red-800 rounded-md transition ease-in-out duration-500">
             <MdOutlineErrorOutline className="min-h-8 min-w-8" />
