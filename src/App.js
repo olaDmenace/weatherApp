@@ -69,11 +69,9 @@ function App() {
       const response = await axios.request(options);
       console.log(response.data);
 
-      // Extract longitude and latitude from the response
       const longitude = response?.data?.Results[0]?.longitude;
       const latitude = response?.data?.Results[0]?.latitude;
 
-      // Make the second request using the extracted longitude and latitude
       const weatherResponse = await axios.get(
         `https://api.weatherbit.io/v2.0/current?lat=${latitude}&lon=${longitude}&key=afed90d4031a483fab64c7bac37b1e2a`
       );
@@ -125,26 +123,26 @@ function App() {
         </div>
       </div>
       <div className="px-4 py-10 grid gap-5 md:w-10/12 mx-auto lg:max-w-7xl">
-        {/* <form className="grid gap-5"> */}
-        <label htmlFor="city" className="relative">
-          <input
-            type="text"
-            id="search"
-            name="search"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            placeholder="Enter City"
-            className="border border-blue-700 bg-transparent placeholder:text-blue-700 rounded-md h-12 w-full px-3 pr-10 ring-0 outline-blue-500 dark:outline-none text-blue-700"
-          />
-          <RiSearchLine className="absolute top-2 right-2 h-8 w-8 p-1 text-blue-800 cursor-pointer" />
-        </label>
-        <button
-          className="bg-blue-700 rounded-md text-white h-12 hover:bg-blue-500 transition ease-in-out duration-500"
-          onClick={() => fetchData()}
-        >
-          Get Forecast
-        </button>
-        {/* </form> */}
+        <form className="grid gap-5">
+          <label htmlFor="city" className="relative">
+            <input
+              type="text"
+              id="search"
+              name="search"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Enter Address"
+              className="border border-blue-700 bg-transparent placeholder:text-blue-700 rounded-md h-12 w-full px-3 pr-10 ring-0 outline-blue-500 dark:outline-none text-blue-700"
+            />
+            <RiSearchLine className="absolute top-2 right-2 h-8 w-8 p-1 text-blue-800 cursor-pointer" />
+          </label>
+          <button
+            className="bg-blue-700 rounded-md text-white h-12 hover:bg-blue-500 transition ease-in-out duration-500"
+            onClick={() => fetchData()}
+          >
+            Get Forecast
+          </button>
+        </form>
         {error && (
           <p className="bg-red-400/30 min-h-10 text-lg px-2 py-3 flex items-center gap-3 content-center text-red-800 rounded-md transition ease-in-out duration-500">
             <MdOutlineErrorOutline className="min-h-8 min-w-8" />
